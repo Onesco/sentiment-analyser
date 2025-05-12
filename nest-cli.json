@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/sentiment-analyser/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/sentiment-analyser/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/sentiment-analyser",
+  "projects": {
+    "sentiment-analyser": {
+      "type": "application",
+      "root": "apps/sentiment-analyser",
+      "entryFile": "main",
+      "sourceRoot": "apps/sentiment-analyser/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/sentiment-analyser/tsconfig.app.json"
+      }
+    }
+  }
+}
