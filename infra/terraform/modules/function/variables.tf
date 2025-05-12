@@ -32,6 +32,6 @@ variable "env_vars" {
   type = map(string)
 }
 
-variable "bucket_name" {
+variable "env" {
   type = string
 }

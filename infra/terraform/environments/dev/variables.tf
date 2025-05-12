@@ -5,7 +5,6 @@ variable "project_id" {
 variable "region" { default = "us-central1" }
 variable "zone" { default = "us-central1-a" }
 variable "db_user" { default = "nestuser" }
-variable "db_pass" {}
 variable "db_name" { default = "nestapp_dev" }
 variable "pubsub_topic" { default = "summary-topic-dev" }
 variable "public_cidr" { default = "10.0.1.0/24" }

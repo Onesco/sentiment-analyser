@@ -1,5 +1,5 @@
 resource "google_storage_bucket" "source_bucket" {
-  name     = var.bucket_name
+  name     = "${var.name}-bucket-${var.env}"
   location = var.region
 
   uniform_bucket_level_access = true
