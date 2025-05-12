@@ -20,13 +20,12 @@ variable "fn_entry_point" { default = "pubSubHandler" }
 
 variable "fn_memory_mb" { default = 256 }
 variable "fn_timeout" { default = 60 }
-
-variable "bucket_name" {
-}
 variable "name" {
   default = "setiment-analyser"
 }
-variable "env" {}
+variable "env" {
+  default = "dev"
+}
 variable "ssh_source_cidr" {}
 variable "sentiment_threshold" {
   default = 0

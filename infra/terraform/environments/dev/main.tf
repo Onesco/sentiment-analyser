@@ -2,8 +2,8 @@
 module "network" {
   source              = "../../modules/network"
   vpc_name            = "${var.project_id}-vpc"
-  public_subnet_cidr  = "10.0.1.0/24"
-  private_subnet_cidr = "10.0.2.0/24"
+  public_subnet_cidr  = var.public_cidr
+  private_subnet_cidr = var.private_cidr
   region              = var.region
   ssh_source_cidr     = var.ssh_source_cidr
 }
@@ -128,7 +128,7 @@ module "sql" {
   source          = "../../modules/sql"
   name            = "${var.name}-sql--${var.env}"
   region          = var.region
-  private_network = module.network.private_subnet_id
+  private_network = module.network.vpc_id
 }
 
 locals {
