@@ -44,6 +44,12 @@ resource "google_project_iam_member" "compute_redis" {
   member  = "serviceAccount:${google_service_account.compute_sa.email}"
 }
 
+resource "google_project_iam_member" "compute_artifactregistry_reader" {
+  project = var.project_id
+  role    = "roles/artifactregistry.reader"
+  member  = "serviceAccount:${google_service_account.compute_sa.email}"
+}
+
 # AI related roles
 resource "google_project_iam_member" "compute_vortex_admin" {
   project = var.project_id
@@ -73,6 +79,11 @@ resource "google_project_iam_member" "function_pubsub" {
 resource "google_project_iam_member" "function_sql" {
   project = var.project_id
   role    = "roles/cloudsql.client"
+  member  = "serviceAccount:${google_service_account.function_sa.email}"
+}
+resource "google_project_iam_member" "function_language_user" {
+  project = var.project_id
+  role    = "roles/cloudlanguage.user"
   member  = "serviceAccount:${google_service_account.function_sa.email}"
 }
 
