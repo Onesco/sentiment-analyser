@@ -26,5 +26,5 @@ resource "google_sql_database" "default_db" {
 resource "google_sql_user" "app_user" {
   name     = "app_user"
   instance = google_sql_database_instance.postgres.name
-  password = random_password.db_password.result
+  password_wo  = random_password.db_password.result
 }

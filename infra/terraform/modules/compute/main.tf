@@ -21,6 +21,6 @@ resource "google_compute_instance" "vm" {
   }
 
   metadata = {
-    startup-script = file("startup.sh")
+    startup-script = file("../../scripts/startup.sh")
   }
 }
