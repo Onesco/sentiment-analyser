@@ -1,3 +1,6 @@
-variable "project_id" {}
+variable "project_id" {
+    type = string
+    default = "sentiment-analysis-app-459419"
+}
 variable "region" { default = "us-central1" }
 variable "zone" { default = "us-central1-a" }
