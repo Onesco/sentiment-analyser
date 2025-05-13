@@ -103,8 +103,8 @@ jobs:
 
     env:
       WORKER_APP_PATH: dist/apps/worker
-      ARTIFACT_NAME: sentiment-worker.zip
-      BUCKET_NAME: ${{ vars.BUCKET_NAME }}
+      ARTIFACT_NAME: "${{vars.PROJECT_NAME}}-artifact-${{vars.ENV_NAME}}"
+      BUCKET_NAME: ${{vars.PROJECT_NAME}}-bucket-${{vars.ENV_NAME}}"
 
     steps:
       - name: Checkout repository
@@ -124,16 +124,16 @@ jobs:
 
       - name: Install dependencies
         run: npm install --production
-
+        
       - name: Build worker app only
-        run: npx nest build worker
+        run: npm run build worker
 
       - name: Prepare zip artifact
         run: |
           mkdir -p worker-artifact
 
           rsync -av \
-            --exclude="apps/${{vars.PROJECT_NAME}}" \
+            --exclude="/apps/\
             --exclude="infra" \
             --exclude="dist/apps/${{vars.PROJECT_NAME}}" \
             --exclude=".github/" \
@@ -145,4 +145,4 @@ jobs:
 
       - name: Upload zip to GCS
         run: |
-          gsutil cp ${{ env.ARTIFACT_NAME }} gs://${{ env.BUCKET_NAME }}/functions/${{ env.ARTIFACT_NAME }}
+          gsutil cp "${{ env.ARTIFACT_NAME }}.zip" gs://${{ env.BUCKET_NAME }}/"${{ env.ARTIFACT_NAME }}.zip"
