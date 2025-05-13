@@ -14,13 +14,13 @@ import {
   GenerativeModel,
 } from '@google-cloud/vertexai';
 import { PubSub } from '@google-cloud/pubsub';
-import { SentimentEntity } from '../../../libs/entities/sentiment.entity';
+import { SentimentEntity } from '@app/entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { LanguageServiceClient } from '@google-cloud/language';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-import { Score, SentimentType } from 'libs/interface';
+import { Score, SentimentType } from '@app/interface';
 
 const threshold = Number(process.env.THRESHOLD);
 const TTL = Number(process.env.TTL) ?? 3600;

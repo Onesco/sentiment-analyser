@@ -3,7 +3,7 @@ import { HttpService } from '@nestjs/axios';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { SentimentEntity } from 'libs/entities/sentiment.entity';
+import { SentimentEntity } from '@app/libs/entities/sentiment.entity';
 
 const serverBaseUrl = process.env.SERVER_BASE_URL;
 

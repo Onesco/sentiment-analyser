@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { WorkerService } from './worker.service';
-import { DatabaseModule } from 'libs/database/database.module';
+import { DatabaseModule } from '@app/libs/database/database.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SentimentEntity } from 'libs/entities/sentiment.entity';
+import { SentimentEntity } from '@app/libs/entities/sentiment.entity';
 
 @Module({
   imports: [DatabaseModule, TypeOrmModule.forFeature([SentimentEntity])],

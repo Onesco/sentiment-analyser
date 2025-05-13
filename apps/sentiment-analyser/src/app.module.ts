@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { DatabaseModule } from '../../../libs/database/database.module';
+import { DatabaseModule } from '@app/database';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SentimentEntity } from '../../../libs/entities/sentiment.entity';
+import { SentimentEntity } from '@app/entities';
 import { CacheModule } from '@nestjs/cache-manager';
 import * as redisStore from 'cache-manager-ioredis';
 
