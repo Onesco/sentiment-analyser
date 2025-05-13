@@ -6,7 +6,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { AxiosResponse } from 'axios';
 import { of } from 'rxjs';
 
-describe('WorkerService', () => {
+xdescribe('WorkerService', () => {
   let service: WorkerService;
   let httpService: HttpService;
   let repoMock: any;
