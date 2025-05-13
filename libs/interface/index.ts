@@ -1,10 +1,10 @@
 export enum SentimentType {
   POSITIVE = 'POSITIVE',
-  NEGATIVE = 'NEGATIVE',
   NEUTRAL = 'NEUTRAL',
+  NEGATIVE = 'NEGATIVE',
 }
 
-export type Score = number | null | undefined;
+export type Score = number | string | undefined;
 
 export interface PubSubMessage {
   data: string;

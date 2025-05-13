@@ -13,7 +13,7 @@ import * as redisStore from 'cache-manager-ioredis';
     TypeOrmModule.forFeature([SentimentEntity]),
     CacheModule.register({
       store: redisStore,
-      host: process.env.REDIS_HOST || 'localhost',
+      host: process.env.REDIS_HOST,
       port: parseInt(process.env.REDIS_PORT || '6379', 10),
       ttl: 3600,
     }),

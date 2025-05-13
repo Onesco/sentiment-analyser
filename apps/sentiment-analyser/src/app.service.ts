@@ -20,7 +20,7 @@ import { Repository } from 'typeorm';
 import { LanguageServiceClient } from '@google-cloud/language';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-import { Score, SentimentType } from 'apps/pubsub/src/interfaces';
+import { Score, SentimentType } from 'libs/interface';
 
 const threshold = Number(process.env.THRESHOLD);
 const TTL = Number(process.env.TTL) ?? 3600;
