@@ -1,0 +1,48 @@
+name: Manual Deploy to Environment
+
+on:
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    defaults:
+      run:
+        working-directory: "infra/terraform/environment/${{vars.ENV_NAME}}"
+
+    env:
+      GOOGLE_CREDENTIALS: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+      ssh_source_cidr: ${{ secrets.MY_IP_CIDR }}
+      credentails: ${HOME}/gcloud.json
+      db_user: ${{secret.DB_USERNAME}}
+      name: ${{vars.PROJECT_NAME}}
+      env_name: ${{var.ENV_NAME}}
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.12.0
+
+      - name: Set up Google Cloud credentials
+        run: |
+          echo "${GOOGLE_CREDENTIALS}" > ${HOME}/gcloud.json
+          gcloud auth activate-service-account --key-file=${HOME}/gcloud.json
+          gcloud config set project ${{ vars.GOOGLE_PROJECT_ID }}
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcloud.json
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan

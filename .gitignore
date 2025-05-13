@@ -58,3 +58,14 @@ pids
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+#terraform files
+/infra/terraform/**/**/.terraform/
+/infra/terraform/**/**/*.tfstate
+/infra/terraform/**/**/*.tfstate.*
+/infra/terraform/**/**/*.tfvars
+/infra/terraform/**/**/*.tfvars.json
+/infra/terraform/**/**/crash.log
+/infra/terraform/**/**/terraform.tfvars
+/infra/terraform/**/**/override.tf
+/infra/terraform/**/**/*.backup

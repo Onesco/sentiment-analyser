@@ -19,12 +19,12 @@ resource "google_sql_database_instance" "postgres" {
 }
 
 resource "google_sql_database" "default_db" {
-  name     = "sentiment_db"
+  name     = var.db_name
   instance = google_sql_database_instance.postgres.name
 }
 
 resource "google_sql_user" "app_user" {
-  name     = "app_user"
+  name     = var.db_user
   instance = google_sql_database_instance.postgres.name
   password_wo  = random_password.db_password.result
 }
