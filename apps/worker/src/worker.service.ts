@@ -25,7 +25,7 @@ export class WorkerService {
         console.warn(`Record not found: ${data.id}`);
         return;
       }
-      const resolvedUrl = new URL('/sentiment', serverBaseUrl).href;
+      const resolvedUrl = new URL('sentiment', serverBaseUrl).href;
       await lastValueFrom(
         this.httpService.post(resolvedUrl, {
           textToAnalyze: record.summary,
