@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { URL } from 'url';
 
 import { SentimentEntity } from '../../../libs/common/src/';
 import { lastValueFrom } from 'rxjs';
