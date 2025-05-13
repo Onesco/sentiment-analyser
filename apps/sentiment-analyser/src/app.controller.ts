@@ -1,24 +1,30 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { AppService } from './app.service';
-import { CreateSummaryDto } from './dto/create-summary.dto';
+import {
+  CreateSummaryDto,
+  GetSentimentDto,
+  IdParamDto,
+} from './dto/create-summary.dto';
+import { SentimentType } from 'apps/pubsub/src/interfaces';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get('results/:id')
-  getHello(): string {
-    return 'TODO';
+  async getOneById(@Param('id') id: IdParamDto['id']) {
+    return await this.appService.getOneById(id);
   }
 
   @Post('sentiment')
-  getHello1(): string {
-    return 'TODO';
+  async getSentiment(
+    @Body() data: GetSentimentDto,
+  ): Promise<{ sentiment: SentimentType }> {
+    return await this.appService.sentimentAnalyser(data.textToAnalyze);
   }
 
   @Post('summarize')
   async summarize(@Body() data: CreateSummaryDto): Promise<any> {
-    const result = await this.appService.summarize(data.text);
-    return result;
+    return await this.appService.summarize(data.text);
   }
 }

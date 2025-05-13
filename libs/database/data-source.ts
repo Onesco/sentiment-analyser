@@ -10,7 +10,7 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: ['apps/sentiment-analyser/src/**/*.entity.ts'],
-  migrations: ['apps/sentiment-analyser/src/database/migrations/*.ts'],
+  entities: ['libs/entities/*.entity.ts'],
+  migrations: ['libs/database/migrations/*.ts'],
   synchronize: false,
 });
