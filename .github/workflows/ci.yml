@@ -90,10 +90,10 @@ jobs:
 
       - name: Tag Docker image for GCR
         run: |
-          docker tag ${{PROJECT_NAME}}-app-${ENV_NAME} gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{PROJECT_NAME}}-app-${ENV_NAME}e:latest
+          docker tag ${{vars.PROJECT_NAME}}-app-${ENV_NAME} gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{vars.PROJECT_NAME}}-app-${ENV_NAME}e:latest
 
       - name: Push Docker image to GCR
-        run: docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{PROJECT_NAME}}-app-${ENV_NAME}e:latest
+        run: docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{vars.PROJECT_NAME}}-app-${vars.ENV_NAME}e:latest
   
   package_fn_artifact:
     name: Build Worker Function and Push to GCS
