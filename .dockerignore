@@ -32,3 +32,6 @@ __tests__/
 
 # Credentials
 credentials/
+
+# Worker App
+apps/worker

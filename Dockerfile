@@ -1,19 +1,17 @@
-# Dockerfile
-
 FROM node:18-alpine
 
-# Set working directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Install dependencies
 COPY package*.json ./
+
 RUN npm install
 
-# Copy source code
 COPY . .
 
-# Expose app port (adjust as needed)
+RUN npm run build sentiment-analyser
+
+COPY . .
+
 EXPOSE 3000
 
-# Start the application
-CMD ["npm", "run", "start"]
+CMD ["npm", "start"]

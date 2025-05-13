@@ -1,0 +1,148 @@
+name: Node CI
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_DB: testing_db
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+    env:
+      DB_NAME: testing_db
+      DB_USER: admin
+      DB_PASSWORD: password
+      DB_HOST: localhost
+      DB_PORT: 5432
+      REDIS_HOST: localhost
+      REDIS_PORT: 6379
+      THRESHOLD: 0
+      PUBSUB_TOPIC: summarization-completed
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Wait for PostgreSQL
+        run: |
+          until pg_isready -h localhost -p 5432 -U admin; do
+            echo "Waiting for PostgreSQL to be ready..."
+            sleep 2
+          done
+
+      - name: Run database migrations
+        run: npm run migration:run
+
+      - name: Run tests
+        run: npm run test
+
+  build_images:
+    name: Build & Push to Google Container Registry
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Install Docker Compose
+        run: sudo apt-get update && sudo apt-get install -y docker-compose
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          export_default_credentials: true
+
+      - name: Configure Docker to use gcloud
+        run: gcloud auth configure-docker
+
+      - name: Build Docker image using docker-compose
+        run: docker-compose build
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+      - name: Tag Docker image for GCR
+        run: |
+          docker tag sentiment-analyser-app-${ENV_NAME} gcr.io/${{ secrets.GCP_PROJECT_ID }}/sentiment-analyser-app-${ENV_NAME}e:latest
+
+      - name: Push Docker image to GCR
+        run: docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/sentiment-analyser-app-${ENV_NAME}e:latest
+  
+  package_fn_artifact:
+    name: Build Worker Function and Push to GCS
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main'
+
+    env:
+      WORKER_APP_PATH: dist/apps/worker
+      ARTIFACT_NAME: sentiment-worker.zip
+      BUCKET_NAME: ${{ vars.BUCKET_NAME }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          export_default_credentials: true
+
+      - name: Install dependencies
+        run: npm install --production
+
+      - name: Build worker app only
+        run: npx nest build worker
+
+      - name: Prepare zip artifact
+        run: |
+          mkdir -p worker-artifact
+
+          rsync -av \
+            --exclude="apps/sentiment-analyser" \
+            --exclude="infra" \
+            --exclude="dist/apps/sentiment-analyser" \
+            --exclude=".github/" \
+            ./ worker-artifact/
+
+          cd worker-artifact
+          zip -r ../${{ env.ARTIFACT_NAME }} .
+          cd ..
+
+      - name: Upload zip to GCS
+        run: |
+          gsutil cp ${{ env.ARTIFACT_NAME }} gs://${{ env.BUCKET_NAME }}/functions/${{ env.ARTIFACT_NAME }}
