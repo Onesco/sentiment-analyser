@@ -186,7 +186,7 @@ module "function" {
   name                  = "${var.name}-handler-${var.env_name}"
   region                = var.region
   service_account_email = google_service_account.function_sa.email
-  env                   = var.env_name
+  env_name              = var.env_name
   entry_point           = var.fn_entry_point
   pubsub_topic          = module.pubsub.topic_id
   vpc_connector         = google_vpc_access_connector.connector.name
