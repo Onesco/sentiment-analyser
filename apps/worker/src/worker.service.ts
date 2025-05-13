@@ -2,8 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { URL } from 'url';
 
-import { SentimentEntity } from '@app/entities';
+import { SentimentEntity } from '../../../libs/common/src/';
+import { lastValueFrom } from 'rxjs';
 
 const serverBaseUrl = process.env.SERVER_BASE_URL;
 
@@ -23,13 +25,12 @@ export class WorkerService {
         console.warn(`Record not found: ${data.id}`);
         return;
       }
-
-      await this.httpService.post(`${serverBaseUrl}/sentiment`, {
-        data: {
+      const resolvedUrl = new URL('sentiment', serverBaseUrl).href;
+      await lastValueFrom(
+        this.httpService.post(resolvedUrl, {
           textToAnalyze: record.summary,
-        },
-      });
-
+        }),
+      );
       console.log(
         'successful analysed and updated record with its sentiment value. id:',
         record?.id,

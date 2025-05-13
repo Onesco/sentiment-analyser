@@ -36,7 +36,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Install dependencies
         run: npm install
@@ -55,6 +55,7 @@ jobs:
         run: npm run test
 
   build_images:
+    environment: dav
     name: Build & Push to Google Container Registry
     runs-on: ubuntu-latest
     needs: test
@@ -88,6 +89,9 @@ jobs:
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
+      - name: print images
+        run: docker images
+
       - name: Tag Docker image for GCR
         run: |
           docker tag ${{vars.PROJECT_NAME}}-app-${vars.ENV_NAME} gcr.io/${{ vars.GOOGLE_PROJECT_ID }}/${{vars.PROJECT_NAME}}-app-${vars.ENV_NAME}:latest
@@ -96,6 +100,7 @@ jobs:
         run: docker push gcr.io/${{ vars.GOOGLE_PROJECT_ID }}/${{vars.PROJECT_NAME}}-app-${vars.ENV_NAME}:latest
   
   package_fn_artifact:
+    environment: dav
     name: Build Worker Function and Push to GCS
     runs-on: ubuntu-latest
     needs: test

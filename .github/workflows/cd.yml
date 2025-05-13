@@ -4,7 +4,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  predeploy:
+  predeploy-dev:
+    environment: dav
     name: Validate Terraform Backend
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
@@ -33,7 +34,8 @@ jobs:
           fi
 
           echo "TF_BUCKET_URL=$BUCKET_URL"
-  terraform:
+  terraform-dev:
+    environment: dav
     name: Terraform Apply
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
