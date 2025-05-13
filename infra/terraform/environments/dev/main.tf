@@ -173,7 +173,7 @@ module "sql" {
 locals {
   default = {
     DB_CONN   = module.sql.instance_connection_name
-    DB_USER   = var.db_user
+    DB_USERNAME   = var.db_user
     DB_PASS   = module.sql.db_password
     THRESHOLD = var.sentiment_threshold
     DB_PORT   = 5432

@@ -20,7 +20,7 @@ jobs:
           - 5432:5432
     env:
       DB_NAME: testing_db
-      DB_USER: admin
+      DB_USERNAME: admin
       DB_PASSWORD: password
       DB_HOST: localhost
       DB_PORT: 5432
