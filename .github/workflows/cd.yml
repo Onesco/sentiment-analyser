@@ -46,7 +46,7 @@ jobs:
       GOOGLE_CREDENTIALS: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
       ssh_source_cidr: ${{ secrets.MY_IP_CIDR }}
       credentails: ${HOME}/gcloud.json
-      db_user: ${{secret.DB_USERNAME}}
+      db_user: ${{secrets.DB_USERNAME}}
       name: ${{vars.PROJECT_NAME}}
       env_name: ${{var.ENV_NAME}}
       
