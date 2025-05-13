@@ -32,6 +32,6 @@ variable "env_vars" {
   type = map(string)
 }
 
-variable "env" {
+variable "env_name" {
   type = string
 }
