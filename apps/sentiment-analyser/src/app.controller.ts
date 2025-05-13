@@ -5,7 +5,7 @@ import {
   GetSentimentDto,
   IdParamDto,
 } from './dto/create-summary.dto';
-import { SentimentType } from 'apps/pubsub/src/interfaces';
+import { SentimentType } from 'libs/interface';
 
 @Controller()
 export class AppController {
