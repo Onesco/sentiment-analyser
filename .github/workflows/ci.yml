@@ -133,9 +133,9 @@ jobs:
           mkdir -p worker-artifact
 
           rsync -av \
-            --exclude="apps/${{PROJECT_NAME}}" \
+            --exclude="apps/${{vars.PROJECT_NAME}}" \
             --exclude="infra" \
-            --exclude="dist/apps/${{PROJECT_NAME}}" \
+            --exclude="dist/apps/${{vars.PROJECT_NAME}}" \
             --exclude=".github/" \
             ./ worker-artifact/
 
