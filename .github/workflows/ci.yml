@@ -94,10 +94,10 @@ jobs:
 
       - name: Tag Docker image for GCR
         run: |
-          docker tag ${{vars.PROJECT_NAME}}-app-${vars.ENV_NAME} gcr.io/${{ vars.GOOGLE_PROJECT_ID }}/${{vars.PROJECT_NAME}}-app-${vars.ENV_NAME}:latest
+          docker tag "${{vars.PROJECT_NAME}}-app-${vars.ENV_NAME}" "gcr.io/${{ vars.GOOGLE_PROJECT_ID }}/${{vars.PROJECT_NAME}}-app-${vars.ENV_NAME}:latest"
 
       - name: Push Docker image to GCR
-        run: docker push gcr.io/${{ vars.GOOGLE_PROJECT_ID }}/${{vars.PROJECT_NAME}}-app-${vars.ENV_NAME}:latest
+        run: docker push "gcr.io/${{ vars.GOOGLE_PROJECT_ID }}/${{vars.PROJECT_NAME}}-app-${vars.ENV_NAME}:latest"
   
   package_fn_artifact:
     environment: dav

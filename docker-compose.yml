@@ -2,6 +2,7 @@ version: '3.8'
 services:
   app:
     build: .
+    image: sentiment-analyser-app-${ENV_NAME}
     container_name: sentiment-analyser-app-${ENV_NAME}
     restart: always
     ports:
@@ -36,7 +37,7 @@ services:
 
   postgres:
     image: postgres:15
-    container_name: psentiment-analyser-db-${ENV_NAME}
+    container_name: sentiment-analyser-db-${ENV_NAME}
     restart: always
     environment:
       POSTGRES_USER: ${DB_USERNAME}
