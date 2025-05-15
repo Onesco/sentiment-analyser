@@ -1,0 +1,50 @@
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+    secrets:
+      GCP_SERVICE_ACCOUNT_KEY:
+        required: true
+
+jobs:
+  build-app:
+    name: Build & Push (${{ inputs.environment }})
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    needs: terraform-validate
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: docker/setup-buildx-action@v2
+
+      - run: sudo apt-get update && sudo apt-get install -y docker-compose
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ vars.GOOGLE_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          export_default_credentials: true
+
+      - run: gcloud auth configure-docker
+
+      - name: Build Docker image
+        run: |
+          docker-compose build
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: "${{ github.workspace }}/gcloud.json"
+          DB_NAME:     ${{ secrets.DB_NAME }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+      - run: docker images
+
+      - run: |
+          docker tag "${{ vars.PROJECT_NAME }}-app-${{ inputs.environment }}" \
+                     "gcr.io/${{ vars.GOOGLE_PROJECT_ID }}/${{ vars.PROJECT_NAME }}-app-${{ inputs.environment }}:latest"
+
+      - run: |
+          docker push "gcr.io/${{ vars.GOOGLE_PROJECT_ID }}/${{ vars.PROJECT_NAME }}-app-${{ inputs.environment }}:latest"

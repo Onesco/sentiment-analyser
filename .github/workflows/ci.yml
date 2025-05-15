@@ -97,51 +97,46 @@ jobs:
       - name: Terraform validate
         run: terraform validate
 
-  build-app:
-    environment: dav
-    name: Build & Push to Google Container Registry
+  terraform-plan:
+    name: Terraform Plan
     runs-on: ubuntu-latest
     needs: terraform-validate
-    if: github.ref == 'refs/heads/main'
-
+    defaults:
+      run:
+        working-directory: "infra/terraform/environments/${{vars.ENV_NAME}}"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Install Docker Compose
-        run: sudo apt-get update && sudo apt-get install -y docker-compose
-
-      - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
         with:
-          project_id: ${{ vars.GOOGLE_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-          export_default_credentials: true
+          terraform_version: 1.12.0
 
-      - name: Configure Docker to use gcloud
-        run: gcloud auth configure-docker
-
-      - name: Build Docker image using docker-compose
-        run: docker-compose build
+      - name: Terraform Init
+        run: terraform init
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: "${{ github.workspace }}/gcloud.json"
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          GOOGLE_CREDENTIALS: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
-      - name: print images
-        run: docker images
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan.binary
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}     
 
-      - name: Tag Docker image for GCR
-        run: |
-          docker tag "${{vars.PROJECT_NAME}}-app-${vars.ENV_NAME}" "gcr.io/${{ vars.GOOGLE_PROJECT_ID }}/${{vars.PROJECT_NAME}}-app-${vars.ENV_NAME}:latest"
+  build-app-dev:
+    uses: ./.github/workflows/build-app.yml
+    with:
+      environment: dev
+    secrets:
+      GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
-      - name: Push Docker image to GCR
-        run: docker push "gcr.io/${{ vars.GOOGLE_PROJECT_ID }}/${{vars.PROJECT_NAME}}-app-${vars.ENV_NAME}:latest"
-  
+  build-app-prod:
+    uses: ./.github/workflows/build-app.yml
+    with:
+      environment: prod
+    secrets:
+      GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+      
   package_fn_artifact:
     environment: dav
     name: Build Worker Function and Push to GCS
