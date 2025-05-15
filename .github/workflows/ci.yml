@@ -74,6 +74,9 @@ jobs:
         run: npm run test
 
   terraform-validate:
+    needs:
+     - run-linters 
+     - test
     name: Terraform Init and Validate
     runs-on: ubuntu-latest
     defaults:
