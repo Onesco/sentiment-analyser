@@ -74,11 +74,11 @@ jobs:
         run: npm run test
 
   terraform-validate:
-    env:
-      ENV_NAME: dev
     name: Terraform Init and Validate
     runs-on: ubuntu-latest
-    
+    defaults:
+        run:
+          working-directory: "infra/terraform/environments/${{vars.ENV_NAME}}"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -90,13 +90,9 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: infra/terraform/environments/${{ env.ENV_NAME }}
-
-
+        
       - name: Terraform validate
         run: terraform validate
-        working-directory: infra/terraform/environments/${{ env.ENV_NAME }}
-
 
   build-app:
     environment: dav
@@ -147,7 +143,7 @@ jobs:
     environment: dav
     name: Build Worker Function and Push to GCS
     runs-on: ubuntu-latest
-    needs: test
+    needs: terraform-validate
     if: github.ref == 'refs/heads/main'
 
     env:
