@@ -127,6 +127,12 @@ export class AppService {
           sentiment,
         },
       );
+
+      this.cacheManager.set(`sentiment_id:${record.id}`, {
+        ...result,
+        sentiment,
+      });
+
       return { sentiment };
     } catch (error) {
       throw new InternalServerErrorException(error?.message);
