@@ -90,12 +90,12 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: infra/terraform/environment/${{ env.ENV_NAME }}
+        working-directory: infra/terraform/environments/${{ env.ENV_NAME }}
 
 
       - name: Terraform validate
         run: terraform validate
-        working-directory: infra/terraform/environment/${{ env.ENV_NAME }}
+        working-directory: infra/terraform/environments/${{ env.ENV_NAME }}
 
 
   build-app:
