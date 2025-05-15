@@ -78,9 +78,7 @@ jobs:
       ENV_NAME: dev
     name: Terraform Init and Validate
     runs-on: ubuntu-latest
-    defaults:
-        run:
-          working-directory: "infra/terraform/environment/${{env.ENV_NAME}}"
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
