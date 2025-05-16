@@ -106,7 +106,7 @@ jobs:
       region: ${{vars.REGION}}
       bucket_name: ${{vars.BUCKET_NAME}}
       ssh_source_cidr: ${{sectrets.ssh_source_cidr}}
-      credentails: "./scretes/credentails.json"
+      credentails: "./secrets/credentials.json"
     defaults:
       run:
         working-directory: "infra/terraform/environments/${{vars.ENV_NAME}}"
@@ -123,7 +123,9 @@ jobs:
           terraform_version: 1.12.0
 
       - name: save credential path
-        run: mkdir /secrets && echo ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }} > /scretes/credentails.json
+        run: |
+          mkdir -p ./secrets
+          echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > ./secrets/credentials.json
 
       - name: Terraform Init
         run: terraform init
