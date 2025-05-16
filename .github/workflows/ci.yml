@@ -101,7 +101,12 @@ jobs:
 
   terraform-plan:
     env:
-      GOOGLE_CREDENTIALS: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }} 
+      GOOGLE_CREDENTIALS: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+      project_id: ${{vars.PROJECT_ID}}
+      region: ${{vars.REGION}}
+      bucket_name: ${{vars.BUCKET_NAME}}
+      ssh_source_cidr: ${{sectrets.ssh_source_cidr}}
+      credentails: "./scretes/credentails.json"
     defaults:
       run:
         working-directory: "infra/terraform/environments/${{vars.ENV_NAME}}"
@@ -116,6 +121,9 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.12.0
+
+      - name: save credential path
+        run: echo ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }} > ./scretes/credentails.json
 
       - name: Terraform Init
         run: terraform init
