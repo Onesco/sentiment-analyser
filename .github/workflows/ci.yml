@@ -105,7 +105,7 @@ jobs:
       project_id: ${{vars.PROJECT_ID}}
       region: ${{vars.REGION}}
       bucket_name: ${{vars.BUCKET_NAME}}
-      ssh_source_cidr: ${{sectrets.ssh_source_cidr}}
+      ssh_source_cidr: ${{secrets.ssh_source_cidr}}
       credentails: "./secrets/credentials.json"
     defaults:
       run:
