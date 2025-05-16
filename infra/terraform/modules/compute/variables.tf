@@ -22,3 +22,6 @@ variable "service_account_email" {
 variable "tags" {
   type = list(string)
 }
+variable "image_name" {
+  default = "debian-cloud/debian-11"
+}
