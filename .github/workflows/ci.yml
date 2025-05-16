@@ -74,14 +74,16 @@ jobs:
         run: npm run test
 
   terraform-validate:
+    env:
+      GOOGLE_CREDENTIALS: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }} 
+    defaults:
+        run:
+          working-directory: "infra/terraform/environments/${{vars.ENV_NAME}}"
     needs:
      - run-linters 
      - test
     name: Terraform Init and Validate
-    runs-on: ubuntu-latest
-    defaults:
-        run:
-          working-directory: "infra/terraform/environments/${{vars.ENV_NAME}}"
+    runs-on: ubuntu-latest  
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -101,9 +103,6 @@ jobs:
     name: Terraform Plan
     runs-on: ubuntu-latest
     needs: terraform-validate
-    defaults:
-      run:
-        working-directory: "infra/terraform/environments/${{vars.ENV_NAME}}"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -115,12 +114,8 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        env:
-          GOOGLE_CREDENTIALS: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan.binary
-        env:
-          GOOGLE_CREDENTIALS: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}     
+        run: terraform plan -out=tfplan.binary    
 
  
