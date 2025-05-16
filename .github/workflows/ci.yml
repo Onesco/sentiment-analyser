@@ -106,7 +106,6 @@ jobs:
       TF_VAR_region: ${{vars.REGION}}
       TF_VAR_bucket_name: ${{vars.BUCKET_NAME}}
       TF_VAR_ssh_source_cidr: ${{secrets.ssh_source_cidr}}
-      TF_VAR_credentails: "./secrets/credentials.json"
     defaults:
       run:
         working-directory: "infra/terraform/environments/${{vars.ENV_NAME}}"
@@ -121,12 +120,7 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.12.0
-
-      - name: save credential path
-        run: |
-          mkdir -p ./secrets
-          echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > ./secrets/credentials.json
-
+    
       - name: Terraform Init
         run: terraform init
 

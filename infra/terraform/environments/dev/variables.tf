@@ -23,10 +23,6 @@
 #   default = 0
 #   type    = number
 # }
-# variable "credentails" {
-#   type = string
-# }
-
 variable "project_id" {
   description = "The GCP project ID"
   type        = string
@@ -41,10 +37,6 @@ variable "region" {
 
 variable "bucket_name" {
   description = "The name of the GCS bucket to create"
-  type        = string
-}
-variable "credentails" {
-  description = "Path to the service account JSON credentials"
   type        = string
 }
 
