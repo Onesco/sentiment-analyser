@@ -102,7 +102,7 @@ jobs:
   terraform-plan:
     env:
       GOOGLE_CREDENTIALS: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-      project_id: ${{vars.PROJECT_ID}}
+      project_id: ${{vars.GOOGLE_PROJECT_ID}}
       region: ${{vars.REGION}}
       bucket_name: ${{vars.BUCKET_NAME}}
       ssh_source_cidr: ${{secrets.ssh_source_cidr}}
