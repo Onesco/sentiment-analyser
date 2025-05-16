@@ -39,6 +39,21 @@ resource "google_compute_firewall" "allow_http" {
   target_tags   = ["http-server"]
 }
 
+
+resource "google_compute_firewall" "allow_redis" {
+  name    = "${var.vpc_name}-allow-redis"
+  network = google_compute_network.vpc.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["6379"]
+  }
+
+  direction     = "INGRESS"
+  source_ranges = [var.public_subnet_cidr]
+}
+
+
 resource "google_compute_firewall" "allow_ssh" {
   name    = "${var.vpc_name}-allow-ssh"
   network = google_compute_network.vpc.name

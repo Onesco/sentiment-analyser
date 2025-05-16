@@ -116,3 +116,12 @@ module "sql" {
   private_network = module.network.vpc_self_link
 }
 
+# # Redis
+module "redis" {
+  source          = "../../modules/redis"
+  name            = "${var.name}-redis--${var.env_name}"
+  region          = var.region
+  tier            = "BASIC"
+  memory_size_gb  = 2
+  private_network = module.network.vpc_self_link
+}
