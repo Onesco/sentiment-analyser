@@ -141,6 +141,7 @@ jobs:
       REGION: ${{ vars.REGION }}
       THRESHOLD: ${{ vars.THRESHOLD }}
       PUBSUB_TOPIC: ${{ vars.PUBSUB_TOPIC }}
+      GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
     steps:
       - name: Checkout source
@@ -167,14 +168,11 @@ jobs:
 
       - name: Show Docker config
         run: cat ~/.docker/config.json
-        
+
       - name: Tag & Push to Artifact Registry
         run: |
           IMAGE="us-central1-docker.pkg.dev/${{ vars.GOOGLE_PROJECT_ID }}/sentiment/${{ vars.PROJECT_NAME }}:${{ github.sha }}"
           docker tag ${{vars.PROJECT_NAME}}-app-${{vars.ENV_NAME}}:latest $IMAGE
           docker push $IMAGE
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-
       - name: list containers
         run: docker ps -l    
