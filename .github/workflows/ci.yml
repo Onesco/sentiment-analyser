@@ -165,6 +165,9 @@ jobs:
       - name: Configure Docker for Artifact Registry
         run: gcloud auth configure-docker us-central1-docker.pkg.dev
 
+      - name: Show Docker config
+        run: cat ~/.docker/config.json
+        
       - name: Tag & Push to Artifact Registry
         run: |
           IMAGE="us-central1-docker.pkg.dev/${{ vars.GOOGLE_PROJECT_ID }}/sentiment/${{ vars.PROJECT_NAME }}:${{ github.sha }}"
