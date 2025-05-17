@@ -157,6 +157,11 @@ jobs:
         run: docker images
 
       - name: Set up Cloud SDK
+        uses: google-github-actions/auth@v1
+        with:
+          credentails_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }} 
+
+      - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: ${{vars.GOOGLE_PROJECT_ID}}
@@ -165,9 +170,6 @@ jobs:
 
       - name: Configure Docker for Artifact Registry
         run: gcloud auth configure-docker us-central1-docker.pkg.dev
-
-      - name: Show Docker config
-        run: cat ~/.docker/config.json
 
       - name: Tag & Push to Artifact Registry
         run: |
