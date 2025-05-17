@@ -172,3 +172,6 @@ jobs:
           docker push $IMAGE
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      - name: list containers
+        run: docker ps -l    
