@@ -215,5 +215,6 @@ jobs:
         uses: google-github-actions/upload-cloud-storage@v1
         with:
           path: ${{ env.ARTIFACT_NAME }}
-          destination: ${{env.ARTIFACT_BUCKET_NAME}}/${{ env.ARTIFACT_NAME }}
+          destination: ${{env.ARTIFACT_BUCKET_NAME}}
           credentials: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          project_id: ${{vars.GOOGLE_PROJECT_ID}}
