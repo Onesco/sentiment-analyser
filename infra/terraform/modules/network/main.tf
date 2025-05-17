@@ -10,7 +10,14 @@ resource "google_compute_subnetwork" "public" {
   network       = google_compute_network.vpc.id
 }
 
-#Private access connect
+# resource "google_compute_subnetwork" "private" {
+#   name          = "${var.vpc_name}-private"
+#   ip_cidr_range = var.private_subnet_cidr
+#   region        = var.region
+#   network       = google_compute_network.vpc.id
+# }
+
+#Private access connect (PAC)
 resource "google_compute_global_address" "private_ip_address" {
   name          = "${var.vpc_name}-psa"
   purpose       = "VPC_PEERING"
@@ -66,4 +73,15 @@ resource "google_compute_firewall" "allow_ssh" {
   direction     = "INGRESS"
   source_ranges = [var.ssh_source_cidr]
   target_tags   = ["ssh-server"]
+}
+
+
+# 1) Serverless VPC Access connector
+resource "google_vpc_access_connector" "connector" {
+  name           = "sa-vpc-ac-${var.env_name}"
+  network        = var.vpc_name
+  region         = var.region
+  ip_cidr_range  = var.private_subnet_cidr
+  max_instances = 3
+  min_instances = 2
 }

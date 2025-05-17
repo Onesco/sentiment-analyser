@@ -19,10 +19,7 @@
 # }
 
 
-# variable "sentiment_threshold" {
-#   default = 0
-#   type    = number
-# }
+
 variable "project_id" {
   description = "The GCP project ID"
   type        = string
@@ -54,6 +51,10 @@ variable "public_cidr" {
   default = "10.0.1.0/24" 
 }
 
+variable "private_cidr" { 
+  default = "10.0.2.0/28" 
+}
+
 variable "ssh_source_cidr" {}
 
 variable "env_name" {
@@ -62,4 +63,21 @@ variable "env_name" {
 
 variable "machine_type" {
   default = "e2-medium"
+}
+
+variable "fn_entry_point" {
+  default = "pubSubHandler"
+}
+
+variable "sentiment_threshold" {
+  default = 0
+  type    = number
+}
+
+variable "db_port" {
+  default = 5432
+}
+
+variable "server_port" {
+  default = 3000
 }

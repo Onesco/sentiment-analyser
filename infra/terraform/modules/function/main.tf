@@ -23,6 +23,6 @@ resource "google_cloudfunctions_function" "func" {
   }
 
   vpc_connector      = var.vpc_connector
-  ingress_settings   = "ALLOW_INTERNAL_AND_GCLB"
+  ingress_settings   = "ALLOW_ALL"
   environment_variables = var.env_vars
 }

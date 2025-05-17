@@ -17,7 +17,6 @@ variable "service_account_email" {
 
 variable "entry_point" {
   type = string
-  default = "pubSubHandler"
 }
 
 variable "pubsub_topic" {

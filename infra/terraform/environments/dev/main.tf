@@ -34,7 +34,9 @@ resource "google_project_service" "required" {
     "aiplatform.googleapis.com",
     "servicenetworking.googleapis.com",
     "cloudfunctions.googleapis.com",
-    "pubsub.googleapis.com"
+    "pubsub.googleapis.com",
+    "vpcaccess.googleapis.com",
+    "cloudbuild.googleapis.com"
   ])
   project = var.project_id
   service = each.key
@@ -44,6 +46,10 @@ resource "google_project_service" "required" {
 resource "google_service_account" "compute_sa" {
   account_id   = "compute-sa"
   display_name = "Compute VM SA"
+}
+resource "google_service_account" "function_sa" {
+  account_id   = "function-sa"
+  display_name = "Cloud Function SA"
 }
 
 # IAM Bindings for Compute VM SA
@@ -83,6 +89,32 @@ resource "google_service_account_iam_member" "compute_sa_user_access" {
   member             = "serviceAccount:terraform-sa@${var.project_id}.iam.gserviceaccount.com"
 }
 
+# IAM Bindings for Function SA
+resource "google_project_iam_member" "function_pubsub" {
+  project = var.project_id
+  role    = "roles/pubsub.subscriber"
+  member  = "serviceAccount:${google_service_account.function_sa.email}"
+}
+resource "google_project_iam_member" "function_sql" {
+  project = var.project_id
+  role    = "roles/cloudsql.client"
+  member  = "serviceAccount:${google_service_account.function_sa.email}"
+}
+
+resource "google_project_iam_member" "function_cloudsql_client" {
+  project = var.project_id
+  role    = "roles/cloudsql.client"
+  member  = "serviceAccount:${google_service_account.function_sa.email}"
+}
+
+resource "google_service_account_iam_member" "terraform_can_act_as_function_sa" {
+  service_account_id = google_service_account.function_sa.name
+  role               = "roles/iam.serviceAccountUser"
+  member             = "serviceAccount:terraform-sa@${var.project_id}.iam.gserviceaccount.com"
+}
+
+# 
+
 
 # # Compute VM
 module "compute" {
@@ -103,6 +135,8 @@ module "network" {
   public_subnet_cidr  = var.public_cidr
   region              = var.region
   ssh_source_cidr     = var.ssh_source_cidr
+  private_subnet_cidr = var.private_cidr
+  env_name            = var.env_name
 }
 
 
@@ -116,7 +150,7 @@ module "sql" {
   private_network = module.network.vpc_self_link
 }
 
-# # Redis
+# Redis
 module "redis" {
   source          = "../../modules/redis"
   name            = "${var.name}-redis--${var.env_name}"
@@ -124,4 +158,35 @@ module "redis" {
   tier            = "BASIC"
   memory_size_gb  = 2
   private_network = module.network.vpc_self_link
+}
+
+# Pub/Sub
+module "pubsub" {
+  source            = "../../modules/pubsub"
+  topic_name        = "${var.name}-topic-${var.env_name}"
+  subscription_name = "${var.name}-sub--${var.env_name}"
+}
+
+locals {
+  default = {
+    DB_HOST          = module.sql.db_host
+    DB_USERNAME      = module.sql.db_name
+    DB_PASSWORD      = module.sql.db_password
+    THRESHOLD        = var.sentiment_threshold
+    DB_PORT          = var.db_port
+    SERVER_BASE_URL  = "${module.compute.instance_internal_ip}/${var.server_port}"
+  }
+}
+
+# # Cloud Function
+module "function" {
+  source                = "../../modules/function"
+  name                  = "${var.name}-func-${var.env_name}"
+  region                = var.region
+  service_account_email = google_service_account.function_sa.email
+  env_name              = var.env_name
+  entry_point           = var.fn_entry_point
+  pubsub_topic          = module.pubsub.topic_id
+  vpc_connector         = module.network.vpc_access_connector
+  env_vars              = local.default
 }

@@ -8,6 +8,11 @@ variable "public_subnet_cidr" {
   description = "CIDR range for the public subnet"
 }
 
+variable "private_subnet_cidr" {
+  type        = string
+  description = "CIDR range for the public subnet"
+}
+
 variable "region" {
   type        = string
   description = "Region for subnets"
@@ -16,4 +21,7 @@ variable "region" {
 variable "ssh_source_cidr" {
   type        = string
   description = "Allowed source CIDR for SSH"
+}
+variable "env_name" {
+  default = "dev"
 }
