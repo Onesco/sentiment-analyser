@@ -1,25 +1,3 @@
-# variable "region" { default = "us-central1" }
-
-
-# variable "pubsub_topic" { default = "summarization-completed" }
-
-# variable "instance_name" { default = "nest-sql-dev" }
-# variable "compute_name" { default = "nest-api-dev" }
-# variable "machine_type" { default = "e2-small" }
-# variable "docker_image" { default = "gcr.io/sentiment-analysis-app-459419/sentiment-analyser-app-dev:latest" }
-
-
-# variable "fn_runtime" { default = "nodejs20" }
-# variable "fn_entry_point" { default = "pubSubHandler" }
-
-# variable "fn_memory_mb" { default = 256 }
-# variable "fn_timeout" { default = 60 }
-# variable "name" {
-#   default = "setiment-analyser"
-# }
-
-
-
 variable "project_id" {
   description = "The GCP project ID"
   type        = string
