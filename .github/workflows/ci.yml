@@ -155,7 +155,9 @@ jobs:
       - name: list images
         run: docker images
 
-      - name: Set up Cloud SDK
+
+      - id: auth
+        name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: ${{vars.GOOGLE_PROJECT_ID}}
@@ -165,6 +167,13 @@ jobs:
       - name: Configure Docker for Artifact Registry
         run: |
           gcloud auth configure-docker us-central1-docker.pkg.dev 
+
+      - name: Login to Artifact Registry
+        uses: docker/login-action@v1
+        with:
+          registry: us-central1-docker.pkg.dev
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}    
 
       - name: Tag & Push to Artifact Registry
         run: |
