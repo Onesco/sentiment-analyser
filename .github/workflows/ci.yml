@@ -139,7 +139,6 @@ jobs:
       TTL: ${{ vars.TTL }}
       GOOGLE_PROJECT_ID: ${{ vars.GOOGLE_PROJECT_ID }}
       REGION: ${{ vars.REGION }}
-      GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY_PATH }}
       THRESHOLD: ${{ vars.THRESHOLD }}
       PUBSUB_TOPIC: ${{ vars.PUBSUB_TOPIC }}
 
