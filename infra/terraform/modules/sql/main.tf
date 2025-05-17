@@ -14,12 +14,7 @@ resource "google_sql_database_instance" "postgres" {
     ip_configuration {
       
       ipv4_enabled    = false
-      # ipv4_enabled    = true
       private_network = var.private_network
-      # authorized_networks {
-      #   name  = "allow-all-functions"
-      #   value = "0.0.0.0/0" # For testing only! only doing this since i can not crete vpc access connector due to account restriction
-      # }
     }
   }
 }

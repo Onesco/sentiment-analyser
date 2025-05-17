@@ -3,7 +3,7 @@ name: Manual Deploy to Environment
 on:
   workflow_dispatch:
 
-jobs:
+jobs:      
   terraform-dev:
     environment: dav
     name: Terraform Apply

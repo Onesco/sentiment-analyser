@@ -19,8 +19,18 @@ resource "google_compute_instance" "vm" {
     email = var.service_account_email
     scopes = []
   }
-
-  metadata = {
-    startup-script = file("../../scripts/startup.sh")
-  }
+  metadata_startup_script = templatefile("../../scripts/startup.sh", {
+    DOCKER_IMAGE    = "gcr.io/${var.project_id}/${var.name}-app:${var.env_name}"
+    DB_USERNAME    = var.db_user
+    DB_PASSWORD = var.db_password
+    CONTAINER_NAME  = "${var.name}-app:${var.env_name}"
+    DB_HOST = var.db_host
+    DB_NAME = var.db_name
+    DB_PORT = var.db_port
+    TTL = 3600
+    PUBSUB_TOPIC = var.pubsub_topic
+    REDIS_HOST = var.redis_host
+    REDIS_PORT = var.redis_port
+    THRESHOLD = var.threshold
+  })
 }

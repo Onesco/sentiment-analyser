@@ -113,21 +113,6 @@ resource "google_service_account_iam_member" "terraform_can_act_as_function_sa" 
   member             = "serviceAccount:terraform-sa@${var.project_id}.iam.gserviceaccount.com"
 }
 
-# 
-
-
-# # Compute VM
-module "compute" {
-  source                = "../../modules/compute"
-  name                  = "${var.name}-vm-${var.env_name}"
-  zone                  = var.zone
-  machine_type          = var.machine_type
-  subnet_id             = module.network.public_subnet_id
-  service_account_email = google_service_account.compute_sa.email
-  tags                  = ["http-server", "ssh-server"]
-}
-
-
 #  VPC & Subnet + Firewalls
 module "network" {
   source              = "../../modules/network"
@@ -176,6 +161,28 @@ locals {
     DB_PORT          = var.db_port
     SERVER_BASE_URL  = "${module.compute.instance_internal_ip}/${var.server_port}"
   }
+}
+
+# # Compute VM
+module "compute" {
+  source                = "../../modules/compute"
+  name                  = "${var.name}-vm-${var.env_name}"
+  zone                  = var.zone
+  machine_type          = var.machine_type
+  subnet_id             = module.network.public_subnet_id
+  service_account_email = google_service_account.compute_sa.email
+  tags                  = ["http-server", "ssh-server"]
+  db_host               = module.sql.db_host
+  db_name               = module.sql.db_name
+  db_password           = module.sql.db_password
+  db_user               = module.sql.db_name
+  env_name              = var.env_name
+  project_id            = var.project_id
+  pubsub_topic          = module.pubsub.topic_name
+  redis_host            = module.redis.redis_host
+  redis_port            = module.redis.redis_port
+  db_port               = var.db_port
+  threshold             = var.sentiment_threshold
 }
 
 # # Cloud Function

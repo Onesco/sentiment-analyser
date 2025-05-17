@@ -2,8 +2,8 @@ version: '3.8'
 services:
   app:
     build: .
-    image: gcr.io/${GOOGLE_PROJECT_ID}/${PROJECT_NAME}-app:${ENV_NAME}
-    container_name: ${PROJECT_NAME}-app-${ENV_NAME}
+    image: ${PROJECT_NAME}-app:${ENV_NAME}
+    container_name: ${PROJECT_NAME}-app:${ENV_NAME}
     restart: always
     ports:
       - '3000:3000'

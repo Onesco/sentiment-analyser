@@ -25,3 +25,16 @@ variable "tags" {
 variable "image_name" {
   default = "debian-cloud/debian-11"
 }
+
+variable "env_name" {}
+
+variable "db_user" {}
+variable "db_password" {}
+variable "db_name" {}
+variable "db_host" {}
+variable "project_id" {}
+variable "db_port" {}
+variable "redis_port" {}
+variable "redis_host" {}
+variable "pubsub_topic" {}
+variable "threshold" {}
