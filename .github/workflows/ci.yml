@@ -197,13 +197,12 @@ jobs:
         run: npm ci
 
       - name: Build NestJS App
-        run: npm run build worker
+        run: npm run build:worker
 
       - name: Copy package.json and prepare function
         run: |
           mkdir -p ./function
-          mv dist/apps/worker/main.js dist/apps/worker/index.js
-          cp -r dist/apps/worker/index.js ./function
+          cp -r dist/index.js ./function
           cp package.json ./function
           cp package-lock.json ./function
 
