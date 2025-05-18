@@ -206,7 +206,7 @@ jobs:
           # copy package.json without scripts, devDependencies, or jest
           jq 'del(.scripts, .devDependencies, .jest)' package.json > ./function/package.json
           cp package-lock.json ./function
-          ehco ./function/package.json
+          echo ./function/package.json
 
       - name: Zip Function Code
         run: |
