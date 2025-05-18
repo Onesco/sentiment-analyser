@@ -173,7 +173,7 @@ jobs:
 
       - name: Tag & Push to Artifact Registry
         run: |
-          IMAGE="us-central1-docker.pkg.dev/${{ vars.GOOGLE_PROJECT_ID }}/sentiment/${{ vars.PROJECT_NAME }}:${{ github.sha }}"
+          IMAGE="us-central1-docker.pkg.dev/${{ vars.GOOGLE_PROJECT_ID }}/sentiment/${{ vars.PROJECT_NAME }}:latest"
           docker tag ${{vars.PROJECT_NAME}}-app-${{vars.ENV_NAME}}:latest $IMAGE
           docker push $IMAGE
 
