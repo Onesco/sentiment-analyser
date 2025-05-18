@@ -12,6 +12,7 @@ resource "google_sql_database_instance" "postgres" {
     tier = var.tier
 
     ip_configuration {
+      
       ipv4_enabled    = false
       private_network = var.private_network
     }

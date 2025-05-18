@@ -2,53 +2,21 @@ version: '3.8'
 services:
   app:
     build: .
-    image: sentiment-analyser-app-${ENV_NAME}
-    container_name: sentiment-analyser-app-${ENV_NAME}
+    image: ${PROJECT_NAME}-app-${ENV_NAME}:latest
+    container_name: ${PROJECT_NAME}-app-${ENV_NAME}:latest
     restart: always
     ports:
       - '3000:3000'
     environment:
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      TTL: 3600
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_USERNAME: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_NAME: sentiment-analyser-db-${ENV_NAME}
+      TTL: ${TTL}
       GOOGLE_PROJECT_ID: ${GOOGLE_PROJECT_ID}
       REGION: ${REGION}
-      GOOGLE_APPLICATION_CREDENTIALS: ${GOOGLE_APPLICATION_CREDENTIALS}
-      THRESHOLD: 0
-      PUBSUB_TOPIC: summarization-completed
+      THRESHOLD: ${THRESHOLD}
+      PUBSUB_TOPIC: ${PUBSUB_TOPIC}
       ENV_NAME: ${ENV_NAME}
     volumes:
-      - .:/usr/src/app
       - ./credentials:/app/credentials
-    depends_on:
-      - redis
-      - postgres
 
-  redis:
-    image: redis:7
-    container_name: sentiment-analyser-redis-${ENV_NAME}
-    ports:
-      - '6379:6379'
-
-  postgres:
-    image: postgres:15
-    container_name: sentiment-analyser-db-${ENV_NAME}
-    restart: always
-    environment:
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: sentiment-analyser-db-${ENV_NAME}
-    ports:
-      - '5432:5432'
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-volumes:
-  postgres_data:
+   
 
 

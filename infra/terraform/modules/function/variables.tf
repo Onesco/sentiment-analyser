@@ -17,7 +17,6 @@ variable "service_account_email" {
 
 variable "entry_point" {
   type = string
-  default = "pubSubHandler"
 }
 
 variable "pubsub_topic" {
@@ -34,4 +33,8 @@ variable "env_vars" {
 
 variable "env_name" {
   type = string
+}
+
+variable "project_name" {
+  
 }

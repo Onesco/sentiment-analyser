@@ -12,4 +12,4 @@ RUN npm run build sentiment-analyser
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "start:prod"]

@@ -1,11 +1,10 @@
 output "public_subnet_id" {
   value = google_compute_subnetwork.public.id
 }
-
-output "private_subnet_id" {
-  value = google_compute_subnetwork.private.id
+output "vpc_self_link" {
+  value = google_compute_network.vpc.self_link
 }
 
-output "vpc_id" {
-  value = google_compute_network.vpc.id
+output "vpc_access_connector" {
+  value = google_vpc_access_connector.connector.id
 }
