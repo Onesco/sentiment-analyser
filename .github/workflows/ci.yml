@@ -131,6 +131,7 @@ jobs:
       ARTIFACT_NAME: ${{ vars.PROJECT_NAME }}-artifact-${{ vars.ENV_NAME }}
       ARTIFACT_BUCKET_NAME: worker-function-artifacts
       REGION: ${{ vars.REGION }}
+      ENV_NAME: ${{vars.ENV_NAME}}
 
     steps:
       - name: Checkout Code
@@ -167,8 +168,8 @@ jobs:
       - name: Upload to GCS
         uses: google-github-actions/upload-cloud-storage@v1
         with:
-          path: ${{ env.ARTIFACT_NAME }}
-          destination: ${{env.ARTIFACT_BUCKET_NAME}}
+          path: ${{ env.ARTIFACT_NAME }}.zip
+          destination: ${{env.ARTIFACT_BUCKET_NAME}}/worker-${{env.ENV_NAME}}
           project_id: ${{vars.GOOGLE_PROJECT_ID}}
           gzip: false       
 
