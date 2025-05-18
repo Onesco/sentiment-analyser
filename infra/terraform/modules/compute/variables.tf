@@ -38,3 +38,5 @@ variable "redis_port" {}
 variable "redis_host" {}
 variable "pubsub_topic" {}
 variable "threshold" {}
+variable "region" {}
+variable "project_name" {}

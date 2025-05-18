@@ -159,7 +159,7 @@ locals {
     DB_PASSWORD      = module.sql.db_password
     THRESHOLD        = var.sentiment_threshold
     DB_PORT          = var.db_port
-    SERVER_BASE_URL  = "${module.compute.instance_internal_ip}/${var.server_port}"
+    SERVER_BASE_URL  = "http://${module.compute.instance_internal_ip}:${var.server_port}"
     DB_NAME          = module.sql.db_name
   }
 }
@@ -184,6 +184,8 @@ module "compute" {
   redis_port            = module.redis.redis_port
   db_port               = var.db_port
   threshold             = var.sentiment_threshold
+  region                = var.region
+  project_name          = var.name
 }
 
 # # Cloud Function
