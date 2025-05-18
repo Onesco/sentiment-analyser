@@ -226,3 +226,31 @@ jobs:
           path: ${{ env.ARTIFACT_NAME }}.zip
           destination: ${{env.ARTIFACT_BUCKET_NAME}}
           project_id: ${{vars.GOOGLE_PROJECT_ID}}
+
+  deploy_worker:
+    needs: build-and-upload
+    runs-on: ubuntu-latest
+    env:
+      ARTIFACT_NAME: ${{ vars.PROJECT_NAME }}-artifact-${{ vars.ENV_NAME }}
+      ARTIFACT_BUCKET_NAME: ${{ vars.PROJECT_NAME }}-func-${{ vars.ENV_NAME }}-bucket
+      REGION: ${{ vars.REGION }}
+      PROJECT_NAME: ${{ vars.PROJECT_NAME }}
+      ENV_NAME:     ${{ vars.ENV_NAME }}
+      GOOGLE_PROJECT_ID: ${{ vars.GOOGLE_PROJECT_ID }}
+      FUNCTION_NAME: ""
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Cloud SDK
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+    - name: deploy worker        
+      run: |
+        gcloud functions deploy  sentiment-analyser-func-dev \
+        --region=$REGION \
+        --source=gs://$ARTIFACT_BUCKET_NAME/$ARTIFACT_NAME.zip
+
