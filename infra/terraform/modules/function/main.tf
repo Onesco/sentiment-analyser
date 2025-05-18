@@ -6,7 +6,7 @@ data "google_storage_bucket" "source_bucket" {
 # Point at the existing object
 data "google_storage_bucket_object" "source_object" {
   bucket = data.google_storage_bucket.source_bucket.name
-  name   = "${var.project_name}-artifact-${var.env_name}.zip"
+  name   = "${var.project_name}-artifact-${var.env_name}"
 }
 
 # Deploy the Cloud Function
