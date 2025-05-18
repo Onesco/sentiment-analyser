@@ -13,7 +13,7 @@ resource "google_cloudfunctions_function" "func" {
   entry_point = var.entry_point
 
   source_archive_bucket = google_storage_bucket.source_bucket.name
-  source_archive_object = "${var.name}-artifact-${var.env_name}.zip"
+  source_archive_object = "${var.project_name}-artifact-${var.env_name}.zip"
 
   service_account_email = var.service_account_email
 

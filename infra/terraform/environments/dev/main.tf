@@ -196,4 +196,5 @@ module "function" {
   pubsub_topic          = module.pubsub.topic_id
   vpc_connector         = module.network.vpc_access_connector
   env_vars              = local.default
+  project_name           = var.name
 }

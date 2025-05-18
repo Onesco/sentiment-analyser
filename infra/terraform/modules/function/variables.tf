@@ -34,3 +34,7 @@ variable "env_vars" {
 variable "env_name" {
   type = string
 }
+
+variable "project_name" {
+  
+}

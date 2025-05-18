@@ -197,13 +197,12 @@ jobs:
         run: npm ci
 
       - name: Build NestJS App
-        run: npm run build:worker
+        run: npm run build worker
 
       - name: Copy package.json and prepare function
         run: |
           mkdir -p ./function
-          cp -r dist ./function
-          rm -rf /dist/sentiment-analyser
+          cp -r dist/apps/worker/main.js ./function
           cp package.json ./function
 
       - name: Zip Function Code
