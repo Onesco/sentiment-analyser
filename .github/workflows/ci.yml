@@ -115,12 +115,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
+           
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.12.0
-    
+
       - name: Terraform Init
         run: terraform init
 
@@ -220,16 +220,6 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
 
-      - name: Ensure GCS bucket exists
-        run: |
-          if ! gsutil ls -b "gs://${ARTIFACT_BUCKET_NAME}" >/dev/null 2>&1; then
-            echo "Bucket does not exist, creating…"
-            gsutil mb -l "${REGION}" "gs://${ARTIFACT_BUCKET_NAME}"
-            gsutil uniformbucketlevelaccess set on "gs://${ARTIFACT_BUCKET_NAME}"
-          else
-            echo "Bucket gs://${ARTIFACT_BUCKET_NAME} already exists, skipping creation."
-          fi
-      
       - name: Upload to GCS
         uses: google-github-actions/upload-cloud-storage@v1
         with:

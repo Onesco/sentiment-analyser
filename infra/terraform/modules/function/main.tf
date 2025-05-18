@@ -1,25 +1,27 @@
-# resource "google_storage_bucket" "source_bucket" {
-#   name     = "${var.name}-bucket"
-#   location = var.region
-#   force_destroy = true
-#   uniform_bucket_level_access = true
-# }
+resource "google_storage_bucket" "source_bucket" {
+  name     = "${var.name}-bucket"
+  location = var.region
+  force_destroy = true
+  uniform_bucket_level_access = true
+}
 
-# resource "google_storage_bucket_object" "source_object" {
-#   name = "${var.project_name}-artifact-${var.env_name}"
-#   bucket = google_storage_bucket.source_bucket.name
-#   # source = "${var.project_name}-artifact-${var.env_name}.zip"
-# }
+resource "google_storage_bucket_object" "source_object" {
+  name = "${var.project_name}-artifact-${var.env_name}"
+  bucket = google_storage_bucket.source_bucket.name
+  content = "place holder"
+}
 
 # Point at your existing bucket
 data "google_storage_bucket" "source_bucket" {
   name = "${var.name}-bucket"
+  depends_on = [ google_storage_bucket.source_bucket ]
 }
 
 # Point at the existing object
 data "google_storage_bucket_object" "source_object" {
   bucket = data.google_storage_bucket.source_bucket.name
   name   = "${var.project_name}-artifact-${var.env_name}"
+  depends_on = [ google_storage_bucket_object.source_object ]
 }
 
 # Deploy the Cloud Function
