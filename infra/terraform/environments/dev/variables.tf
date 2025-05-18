@@ -22,7 +22,7 @@ variable "zone" {
 
 variable "name" {
   type    = string
-  default = "setiment-analyser"
+  default = "sentiment-analyser"
 }
 
 variable "public_cidr" { 

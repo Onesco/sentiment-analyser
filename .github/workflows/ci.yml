@@ -182,7 +182,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ARTIFACT_NAME: ${{ vars.PROJECT_NAME }}-artifact-${{ vars.ENV_NAME }}.zip
-      ARTIFACT_BUCKET_NAME: ${{ vars.PROJECT_NAME }}-func-${{ vars.ENV_NAME }}-bucket-${{ vars.ENV_NAME }}
+      ARTIFACT_BUCKET_NAME: ${{ vars.PROJECT_NAME }}-func-${{ vars.ENV_NAME }}-bucket
 
     steps:
       - name: Checkout Code

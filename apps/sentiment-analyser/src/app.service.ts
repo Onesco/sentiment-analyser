@@ -70,7 +70,7 @@ export class AppService {
       const response = {
         id: saved.id,
         summary: saved.summary,
-        message: 'Summarization completed. Setiment analysis in initiated.',
+        message: 'Summarization completed. Sentiment analysis in initiated.',
       };
 
       this.pubsub
