@@ -205,6 +205,8 @@ jobs:
           mv dist/apps/worker/main.js dist/apps/worker/index.js
           cp -r dist/apps/worker/index.js ./function
           cp package.json ./function
+          cp package-lock.json ./function
+          npm ci --omit=dev --prefix ./function
 
       - name: Zip Function Code
         run: |
