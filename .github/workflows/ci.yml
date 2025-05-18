@@ -202,7 +202,8 @@ jobs:
       - name: Copy package.json and prepare function
         run: |
           mkdir -p ./function
-          cp -r dist/apps/worker/main.js ./function
+          mv dist/apps/worker/main.js dist/apps/worker/index.js
+          cp -r dist/apps/worker/index.js ./function
           cp package.json ./function
 
       - name: Zip Function Code
