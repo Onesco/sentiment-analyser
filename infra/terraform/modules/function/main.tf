@@ -1,8 +1,25 @@
-resource "google_storage_bucket" "source_bucket" {
-  name     = "${var.name}-bucket"
-  location = var.region
+# resource "google_storage_bucket" "source_bucket" {
+#   name     = "${var.name}-bucket"
+#   location = var.region
+#   force_destroy = true
+#   uniform_bucket_level_access = true
+# }
 
-  uniform_bucket_level_access = true
+# resource "google_storage_bucket_object" "source_object" {
+#   name = "${var.project_name}-artifact-${var.env_name}"
+#   bucket = google_storage_bucket.source_bucket.name
+#   # source = "${var.project_name}-artifact-${var.env_name}.zip"
+# }
+
+# Point at your existing bucket
+data "google_storage_bucket" "source_bucket" {
+  name = "${var.name}-bucket"
+}
+
+# Point at the existing object
+data "google_storage_bucket_object" "source_object" {
+  bucket = data.google_storage_bucket.source_bucket.name
+  name   = "${var.project_name}-artifact-${var.env_name}"
 }
 
 # Deploy the Cloud Function
@@ -12,8 +29,8 @@ resource "google_cloudfunctions_function" "func" {
   region      = var.region
   entry_point = var.entry_point
 
-  source_archive_bucket = google_storage_bucket.source_bucket.name
-  source_archive_object = "${var.project_name}-artifact-${var.env_name}.zip"
+  source_archive_bucket = data.google_storage_bucket.source_bucket.name
+  source_archive_object = data.google_storage_bucket_object.source_object.name
 
   service_account_email = var.service_account_email
 
@@ -23,6 +40,6 @@ resource "google_cloudfunctions_function" "func" {
   }
 
   vpc_connector      = var.vpc_connector
-  ingress_settings   = "ALLOW_ALL"
+  ingress_settings   = "ALLOW_INTERNAL_ONLY"
   environment_variables = var.env_vars
 }

@@ -10,5 +10,5 @@ build({
   external: Object.keys(dependencies),
   platform: 'node',
   format: 'cjs',
-  outfile: 'dist/index.js',
+  outfile: 'dist/function.js',
 });

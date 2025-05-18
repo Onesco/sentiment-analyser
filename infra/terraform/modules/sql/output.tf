@@ -8,13 +8,13 @@ output "db_password" {
 }
 
 output "db_name" {
-  value = google_sql_database_instance.postgres.name
+  value = google_sql_database.default_db.name
 }
 
 output "db_host" {
   value = google_sql_database_instance.postgres.private_ip_address
 }
 
-# output "db_host" {
-#   value = google_sql_database_instance.postgres.ip_address[0].ip_address
-# }
+output "db_username" {
+  value = google_sql_user.app_user.name
+}

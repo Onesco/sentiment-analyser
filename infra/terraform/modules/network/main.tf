@@ -10,13 +10,6 @@ resource "google_compute_subnetwork" "public" {
   network       = google_compute_network.vpc.id
 }
 
-# resource "google_compute_subnetwork" "private" {
-#   name          = "${var.vpc_name}-private"
-#   ip_cidr_range = var.private_subnet_cidr
-#   region        = var.region
-#   network       = google_compute_network.vpc.id
-# }
-
 #Private access connect (PAC)
 resource "google_compute_global_address" "private_ip_address" {
   name          = "${var.vpc_name}-psa"

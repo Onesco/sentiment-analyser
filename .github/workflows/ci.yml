@@ -181,8 +181,9 @@ jobs:
     needs: terraform-plan
     runs-on: ubuntu-latest
     env:
-      ARTIFACT_NAME: ${{ vars.PROJECT_NAME }}-artifact-${{ vars.ENV_NAME }}.zip
+      ARTIFACT_NAME: ${{ vars.PROJECT_NAME }}-artifact-${{ vars.ENV_NAME }}
       ARTIFACT_BUCKET_NAME: ${{ vars.PROJECT_NAME }}-func-${{ vars.ENV_NAME }}-bucket
+      REGION: ${{ vars.REGION }}
 
     steps:
       - name: Checkout Code
@@ -202,11 +203,12 @@ jobs:
       - name: Copy package.json and prepare function
         run: |
           mkdir -p ./function
-          cp -r dist/index.js ./function
+          cp -r dist/function.js ./function
           # copy package.json without scripts, devDependencies, or jest
           jq 'del(.scripts, .devDependencies, .jest)' package.json > ./function/package.json
-          cp package-lock.json ./function
-          echo ./function/package.json
+          echo "—— Generated package.json ——"
+          cat ./function/package.json
+          echo "———————————————"
 
       - name: Zip Function Code
         run: |
@@ -216,8 +218,18 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
         with:
-          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'    
+          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
 
+      - name: Ensure GCS bucket exists
+        run: |
+          if ! gsutil ls -b "gs://${ARTIFACT_BUCKET_NAME}" >/dev/null 2>&1; then
+            echo "Bucket does not exist, creating…"
+            gsutil mb -l "${REGION}" "gs://${ARTIFACT_BUCKET_NAME}"
+            gsutil uniformbucketlevelaccess set on "gs://${ARTIFACT_BUCKET_NAME}"
+          else
+            echo "Bucket gs://${ARTIFACT_BUCKET_NAME} already exists, skipping creation."
+          fi
+      
       - name: Upload to GCS
         uses: google-github-actions/upload-cloud-storage@v1
         with:

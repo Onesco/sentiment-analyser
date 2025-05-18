@@ -155,11 +155,12 @@ module "pubsub" {
 locals {
   default = {
     DB_HOST          = module.sql.db_host
-    DB_USERNAME      = module.sql.db_name
+    DB_USERNAME      = module.sql.db_username
     DB_PASSWORD      = module.sql.db_password
     THRESHOLD        = var.sentiment_threshold
     DB_PORT          = var.db_port
     SERVER_BASE_URL  = "${module.compute.instance_internal_ip}/${var.server_port}"
+    DB_NAME          = module.sql.db_name
   }
 }
 
@@ -175,7 +176,7 @@ module "compute" {
   db_host               = module.sql.db_host
   db_name               = module.sql.db_name
   db_password           = module.sql.db_password
-  db_user               = module.sql.db_name
+  db_user               = module.sql.db_username
   env_name              = var.env_name
   project_id            = var.project_id
   pubsub_topic          = module.pubsub.topic_name
