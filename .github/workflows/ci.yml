@@ -203,8 +203,10 @@ jobs:
         run: |
           mkdir -p ./function
           cp -r dist/index.js ./function
-          cp package.json ./function
+          # copy package.json without scripts, devDependencies, or jest
+          jq 'del(.scripts, .devDependencies, .jest)' package.json > ./function/package.json
           cp package-lock.json ./function
+          ehco ./function/package.json
 
       - name: Zip Function Code
         run: |
