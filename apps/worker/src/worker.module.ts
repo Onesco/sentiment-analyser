@@ -1,16 +1,11 @@
 import { Module } from '@nestjs/common';
-import { HttpModule } from '@nestjs/axios';
 import { WorkerService } from './worker.service';
-import { DatabaseModule } from '../../../libs/common/src/';
+import { DatabaseModule } from '../../../libs/common/src/database/database.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SentimentEntity } from '../../../libs/common/src/';
+import { SentimentEntity } from '../../../libs/common/src/entities/sentiment.entity';
 
 @Module({
-  imports: [
-    DatabaseModule,
-    HttpModule,
-    TypeOrmModule.forFeature([SentimentEntity]),
-  ],
+  imports: [DatabaseModule, TypeOrmModule.forFeature([SentimentEntity])],
   providers: [WorkerService],
 })
 export class WorkerModule {}
