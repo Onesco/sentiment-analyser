@@ -213,7 +213,7 @@ jobs:
       - name: Zip Function Code
         run: |
           cd function
-          zip -r ../$ARTIFACT_NAME .
+          zip -r "../${ARTIFACT_NAME}.zip" .
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
