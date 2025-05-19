@@ -75,7 +75,7 @@ export class AppService {
 
       this.pubsub
         .topic(process.env.PUBSUB_TOPIC)
-        .publishMessage({ data: Buffer.from(JSON.stringify(saved.id)) });
+        .publishMessage({ data: saved.id });
 
       return response;
     } catch (error) {
