@@ -70,12 +70,12 @@ export class AppService {
       const response = {
         id: saved.id,
         summary: saved.summary,
-        message: 'Summarization completed. Sentiment analysis in initiated.',
+        message: 'Summarization completed. Setiment analysis in initiated.',
       };
 
       this.pubsub
         .topic(process.env.PUBSUB_TOPIC)
-        .publishMessage({ data: saved.id });
+        .publishMessage({ data: Buffer.from(JSON.stringify(saved.id)) });
 
       return response;
     } catch (error) {
