@@ -235,7 +235,8 @@ jobs:
     needs: terraform-plan
     runs-on: ubuntu-latest
     name: Terraform apply
-    if: startsWith(github.ref, 'refs/tags/')
+    if: github.ref == 'refs/heads/main'
+    # if: startsWith(github.ref, 'refs/tags/')
     env:
       GOOGLE_CREDENTIALS: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
       TF_VAR_project_id: ${{vars.GOOGLE_PROJECT_ID}}
