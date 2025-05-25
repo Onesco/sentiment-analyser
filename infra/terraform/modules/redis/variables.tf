@@ -24,3 +24,4 @@ variable "private_network" {
   type        = string
   description = "The VPC network self-link for private IP connectivity"
 }
+variable "private_vpc_connection" {}

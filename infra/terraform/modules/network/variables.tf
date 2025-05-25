@@ -8,10 +8,6 @@ variable "public_subnet_cidr" {
   description = "CIDR range for the public subnet"
 }
 
-variable "private_subnet_cidr" {
-  type        = string
-  description = "CIDR range for the public subnet"
-}
 
 variable "region" {
   type        = string

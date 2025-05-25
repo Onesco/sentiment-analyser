@@ -35,6 +35,5 @@ variable "env_name" {
   type = string
 }
 
-variable "project_name" {
-  
-}
+variable "project_name" {}
+variable "serverless_connector" {}

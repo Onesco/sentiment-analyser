@@ -9,4 +9,5 @@ resource "google_redis_instance" "this" {
   }
 
   authorized_network = var.private_network
+  depends_on = [var.private_vpc_connection]
 }
