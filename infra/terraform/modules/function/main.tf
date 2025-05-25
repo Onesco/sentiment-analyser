@@ -7,6 +7,7 @@ data "google_storage_bucket" "source_bucket" {
 data "google_storage_bucket_object" "source_object" {
   bucket = data.google_storage_bucket.source_bucket.name
   name   = "worker-${var.env_name}/${var.project_name}-artifact-${var.env_name}.zip"
+  depends_on = [ data.google_storage_bucket.source_bucket ]
 }
 
 # Deploy the Cloud Function
@@ -29,4 +30,5 @@ resource "google_cloudfunctions_function" "func" {
   vpc_connector      = var.vpc_connector
   ingress_settings   = "ALLOW_INTERNAL_ONLY"
   environment_variables = var.env_vars
+  depends_on = [ var.serverless_connector ]
 }

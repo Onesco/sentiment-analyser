@@ -40,3 +40,6 @@ variable "pubsub_topic" {}
 variable "threshold" {}
 variable "region" {}
 variable "project_name" {}
+variable "deletion_protection" {
+  type = bool
+}

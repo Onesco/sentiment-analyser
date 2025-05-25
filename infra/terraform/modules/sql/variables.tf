@@ -27,3 +27,7 @@ variable "db_user" {
 variable "db_name" {
   type = string
 }
+variable "deletion_protection" {
+  type = bool
+}
+variable "private_vpc_connection" {}

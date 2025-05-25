@@ -9,4 +9,5 @@ resource "google_pubsub_subscription" "this" {
   topic = google_pubsub_topic.this.id
 
   ack_deadline_seconds = var.ack_deadline_seconds
+  depends_on = [ google_pubsub_topic.this ]
 }

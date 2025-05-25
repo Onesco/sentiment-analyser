@@ -21,6 +21,8 @@ resource "google_compute_instance" "vm" {
       "https://www.googleapis.com/auth/cloud-platform"
     ]
   }
+  deletion_protection = var.deletion_protection
+
   metadata_startup_script = templatefile("../../scripts/startup.sh", {
     DOCKER_IMAGE    = "${var.region}-docker.pkg.dev/${var.project_id}/sentiment/${var.project_name}:latest"
     DB_USERNAME    = var.db_user
