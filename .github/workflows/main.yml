@@ -143,7 +143,7 @@ jobs:
       - name: Enable Artifact Registry API
         run: gcloud services enable artifactregistry.googleapis.com
       - name: Configure Docker for Artifact Registry
-        run: gcloud auth configure-docker us-central1-docker.pkg.dev
+        run: gcloud services enable artifactregistry.googleapis.com --project=${{ vars.GOOGLE_PROJECT_ID }}
 
       - name: Tag & Push to Artifact Registry
         run: |
