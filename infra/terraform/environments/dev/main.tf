@@ -237,6 +237,8 @@ module "redis" {
   tier            = "BASIC"
   memory_size_gb  = 2
   private_network = module.network.vpc_self_link
+  private_vpc_connection = google_service_networking_connection.private_vpc_connection
+  
   depends_on      = [google_project_service.required]
 }
 
