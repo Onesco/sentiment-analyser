@@ -142,12 +142,29 @@ jobs:
 
       - name: Enable Artifact Registry API
         run: gcloud services enable artifactregistry.googleapis.com --project=${{ vars.GOOGLE_PROJECT_ID }}
+
+      - name: Create Artifact Registry Repository (if not exists)
+        run: |
+          REGION="us-central1"
+          REPO="sentiment"
+          FORMAT="docker"
+
+          # Check if the repo already exists
+          if ! gcloud artifacts repositories describe $REPO --location=$REGION >/dev/null 2>&1; then
+            echo "Creating repository $REPO in $REGION..."
+            gcloud artifacts repositories create $REPO \
+              --repository-format=$FORMAT \
+              --location=$REGION \
+              --description="Repository for sentiment analysis images"
+          else
+            echo "Repository $REPO already exists in $REGION"
+          fi  
       - name: Configure Docker for Artifact Registry
         run: gcloud auth configure-docker us-central1-docker.pkg.dev
 
       - name: Tag & Push to Artifact Registry
         run: |
-          IMAGE="us-central1-docker.pkg.dev/${{ vars.GOOGLE_PROJECT_ID }}/${{ vars.PROJECT_NAME }}:latest"
+          IMAGE="us-central1-docker.pkg.dev/${{ vars.GOOGLE_PROJECT_ID }}/sentiment/${{ vars.PROJECT_NAME }}:latest"
           docker tag ${{vars.PROJECT_NAME}}-app-${{vars.ENV_NAME}}:latest $IMAGE
           docker push $IMAGE
 
