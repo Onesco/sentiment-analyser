@@ -24,10 +24,10 @@ resource "google_compute_instance" "vm" {
   deletion_protection = var.deletion_protection
 
   metadata_startup_script = templatefile("../../scripts/startup.sh", {
-    DOCKER_IMAGE    = "${var.region}-docker.pkg.dev/${var.project_id}/${var.project_name}:latest"
+    DOCKER_IMAGE    = "${var.region}-docker.pkg.dev/${var.project_id}/sentiment/${var.project_name}:latest"
     DB_USERNAME    = var.db_user
     DB_PASSWORD = var.db_password
-    CONTAINER_NAME  = "${var.region}-docker.pkg.dev/${var.project_id}/${var.project_name}:latest"
+    CONTAINER_NAME  = "${var.region}-docker.pkg.dev/${var.project_id}/sentiment/${var.project_name}:latest"
     DB_HOST = var.db_host
     DB_NAME = var.db_name
     DB_PORT = var.db_port
