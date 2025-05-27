@@ -24,6 +24,7 @@ import { Score, SentimentType } from '@app/interface';
 
 const threshold = Number(process.env.THRESHOLD);
 const TTL = Number(process.env.TTL) ?? 3600;
+const ORDER_KEY = 'EVENT_EMITED';
 
 @Injectable()
 export class AppService {
@@ -73,9 +74,12 @@ export class AppService {
         message: 'Summarization completed. Setiment analysis in initiated.',
       };
 
-      this.pubsub
-        .topic(process.env.PUBSUB_TOPIC)
-        .publishMessage({ data: Buffer.from(JSON.stringify(saved.id)) });
+      await this.pubsub
+        .topic(process.env.PUBSUB_TOPIC, { messageOrdering: true })
+        .publishMessage({
+          data: Buffer.from(JSON.stringify(saved.id)),
+          orderingKey: ORDER_KEY,
+        });
 
       return response;
     } catch (error) {
