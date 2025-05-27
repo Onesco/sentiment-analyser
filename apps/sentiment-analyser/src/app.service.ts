@@ -77,7 +77,7 @@ export class AppService {
       await this.pubsub
         .topic(process.env.PUBSUB_TOPIC, { messageOrdering: true })
         .publishMessage({
-          data: Buffer.from(JSON.stringify(saved.id)),
+          data: Buffer.from(JSON.stringify({ id: saved.id })),
           orderingKey: ORDER_KEY,
         });
 
