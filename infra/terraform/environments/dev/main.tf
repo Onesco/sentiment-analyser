@@ -21,7 +21,6 @@ resource "google_storage_bucket" "terraform_state" {
   uniform_bucket_level_access = true
 }
 
-
 # enabled required  API
 resource "google_project_service" "required" {
   for_each = toset([
@@ -57,6 +56,16 @@ resource "google_service_account" "compute_sa" {
 resource "google_service_account" "function_sa" {
   account_id   = "function-sa"
   display_name = "Cloud Function SA"
+  depends_on   = [google_project_service.required]
+
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
+resource "google_service_account" "datadog_sa" {
+  account_id   = "datadog_sa"
+  display_name = "Datadog SA"
   depends_on   = [google_project_service.required]
 
   lifecycle {
@@ -172,6 +181,14 @@ resource "google_service_account_iam_member" "terraform_can_act_as_function_sa" 
   lifecycle {
     prevent_destroy = false
   }
+}
+
+# IAM Bindings for Datadog SA
+resource "google_project_iam_member" "datadog_sa_viewer" {
+  project = var.project_id
+  role    = "roles/viewer"
+  member  = "serviceAccount:${google_service_account.datadog_sa.email}"
+  depends_on = [google_service_account.compute_sa]
 }
 
 
