@@ -22,7 +22,7 @@ resource "google_cloudfunctions2_function" "func" {
     source {
       storage_source {
         bucket = data.google_storage_bucket.source_bucket.name
-        object = data.google_storage_bucket_object.name
+        object = data.google_storage_bucket_object.source_object.name
       }
     }
     environment_variables = var.env_vars

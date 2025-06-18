@@ -64,7 +64,7 @@ resource "google_service_account" "function_sa" {
 }
 
 resource "google_service_account" "datadog_sa" {
-  account_id   = "datadog_sa"
+  account_id   = "datadog-sa"
   display_name = "Datadog SA"
   depends_on   = [google_project_service.required]
 
