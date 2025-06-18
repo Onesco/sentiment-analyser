@@ -43,3 +43,5 @@ variable "project_name" {}
 variable "deletion_protection" {
   type = bool
 }
+variable "dd_api_key" {}
+variable "dd_site" {}

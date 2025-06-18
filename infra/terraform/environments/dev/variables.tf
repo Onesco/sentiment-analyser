@@ -50,3 +50,7 @@ variable "db_port" {
 
 variable "server_port" {
 }
+variable "DD_API_KEY" {
+}
+variable "DD_SITE" {
+}

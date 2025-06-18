@@ -238,6 +238,8 @@ jobs:
       TF_VAR_sentiment_threshold: ${{vars.THRESHOLD}}
       TF_VAR_server_port: ${{vars.SERVER_PORT}}
       TF_VAR_db_port: ${{vars.DB_PORT}}
+      TF_VAR_DD_API_KEY: ${{secrets.DD_API_KEY}}
+      TF_VAR_DD_SITE: ${{vars.DD_SITE}}
     defaults:
       run:
         working-directory: "infra/terraform/environments/${{vars.ENV_NAME}}"
@@ -280,6 +282,8 @@ jobs:
       TF_VAR_sentiment_threshold: ${{vars.THRESHOLD}}
       TF_VAR_server_port: ${{vars.SERVER_PORT}}
       TF_VAR_db_port: ${{vars.DB_PORT}}
+      TF_VAR_DD_API_KEY: ${{secrets.DD_API_KEY}}
+      TF_VAR_DD_SITE: ${{vars.DD_SITE}}
     defaults:
       run:
         working-directory: "infra/terraform/environments/${{vars.ENV_NAME}}"

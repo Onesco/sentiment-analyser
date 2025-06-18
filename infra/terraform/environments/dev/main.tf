@@ -304,6 +304,8 @@ module "compute" {
   threshold             = var.sentiment_threshold
   region                = var.region
   project_name          = var.name
+  dd_api_key            = var.DD_API_KEY
+  dd_site               = var.DD_SITE
   deletion_protection   = false
 
   depends_on = [google_project_service.required]
