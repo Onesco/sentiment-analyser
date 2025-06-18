@@ -35,7 +35,8 @@ resource "google_project_service" "required" {
     "cloudfunctions.googleapis.com",
     "vpcaccess.googleapis.com",
     "cloudbuild.googleapis.com",
-    "compute.googleapis.com"
+    "compute.googleapis.com",
+    "eventarc.googleapis.com",
   ])
   project                    = var.project_id
   service                    = each.key
