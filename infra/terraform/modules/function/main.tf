@@ -10,25 +10,38 @@ data "google_storage_bucket_object" "source_object" {
   depends_on = [ data.google_storage_bucket.source_bucket ]
 }
 
-# Deploy the Cloud Function
-resource "google_cloudfunctions_function" "func" {
+# # Deploy the Cloud Function
+resource "google_cloudfunctions2_function" "func" {
   name        = var.name
-  runtime     = var.runtime
-  region      = var.region
-  entry_point = var.entry_point
+  location    = var.region
+  description = "Cloud Function 2nd Gen"
 
-  source_archive_bucket = data.google_storage_bucket.source_bucket.name
-  source_archive_object = data.google_storage_bucket_object.source_object.name
-
-  service_account_email = var.service_account_email
-
-  event_trigger {
-    event_type = "providers/cloud.pubsub/eventTypes/topic.publish"
-    resource   = var.pubsub_topic
+  build_config {
+    runtime     = var.runtime
+    entry_point = var.entry_point
+    source {
+      storage_source {
+        bucket = data.google_storage_bucket.source_bucket.name
+        object = data.google_storage_bucket_object.source_object.name
+      }
+    }
+    environment_variables = var.env_vars
   }
 
-  vpc_connector      = var.vpc_connector
-  ingress_settings   = "ALLOW_INTERNAL_ONLY"
-  environment_variables = var.env_vars
-  depends_on = [ var.serverless_connector ]
+  service_config {
+    service_account_email = var.service_account_email
+    vpc_connector         = var.vpc_connector
+    ingress_settings      = "INGRESS_SETTINGS_INTERNAL_ONLY"
+    max_instance_count    = 3
+    timeout_seconds       = 60
+  }
+
+  event_trigger {
+    trigger_region = var.region
+    event_type     = "google.cloud.pubsub.topic.v1.messagePublished"
+    pubsub_topic   = var.pubsub_topic
+    retry_policy   = "RETRY_POLICY_RETRY"
+  }
+
+  depends_on = [var.serverless_connector]
 }
