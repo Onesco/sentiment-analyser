@@ -55,4 +55,11 @@ sudo docker run --rm \
   "${DOCKER_IMAGE}" \
   npm run start:prod
 
+echo "installing datadog agent"
+
+sudo DD_API_KEY=${DD_API_KEY} \
+DD_SITE=${DD_SITE} \
+bash -c "$(curl -L https://install.datadoghq.com/scripts/install_script_agent7.sh)"
+
+
 echo "Application deployed and running as container ${CONTAINER_NAME}."

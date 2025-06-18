@@ -37,5 +37,8 @@ resource "google_compute_instance" "vm" {
     REDIS_PORT = var.redis_port
     THRESHOLD = var.threshold
     GOOGLE_PROJECT_ID = var.project_id
+    DD_API_KEY = var.dd_api_key
+    DD_SITE = var.dd_site
+    DD_ENV_NAME = var.env_name
   })
 }
