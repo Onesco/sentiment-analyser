@@ -31,7 +31,7 @@ resource "google_cloudfunctions2_function" "func" {
   service_config {
     service_account_email = var.service_account_email
     vpc_connector         = var.vpc_connector
-    ingress_settings      = "INGRESS_SETTINGS_INTERNAL_ONLY"
+    ingress_settings      = "ALLOW_INTERNAL_ONLY"
     max_instance_count    = 3
     timeout_seconds       = 60
   }
