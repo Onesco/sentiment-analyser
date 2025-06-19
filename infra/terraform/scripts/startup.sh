@@ -33,17 +33,19 @@ export $(cat $ENV_FILE | xargs)
 
 sudo gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
 
-echo "running datadog container"
-sudo docker run -d --name dd-agent \
--e DD_API_KEY="${DD_API_KEY}"\
--e DD_SITE="${DD_SITE}" \
--e DD_DOGSTATSD_NON_LOCAL_TRAFFIC=true \
--e DD_ENV="${DD_ENV_NAME}" \
--v /var/run/docker.sock:/var/run/docker.sock:ro \
--v /proc/:/host/proc/:ro \
--v /sys/fs/cgroup/:/host/sys/fs/cgroup:ro \
--v /var/lib/docker/containers:/var/lib/docker/containers:ro \
-gcr.io/datadoghq/agent:7
+if ! sudo docker ps -a --format '{{.Names}}' | grep -q '^dd-agent$'; then
+  echo "running datadog container"
+  sudo docker run -d --name dd-agent \
+  -e DD_API_KEY="${DD_API_KEY}"\
+  -e DD_SITE="${DD_SITE}" \
+  -e DD_DOGSTATSD_NON_LOCAL_TRAFFIC=true \
+  -e DD_ENV="${DD_ENV_NAME}" \
+  -v /var/run/docker.sock:/var/run/docker.sock:ro \
+  -v /proc/:/host/proc/:ro \
+  -v /sys/fs/cgroup/:/host/sys/fs/cgroup:ro \
+  -v /var/lib/docker/containers:/var/lib/docker/containers:ro \
+  gcr.io/datadoghq/agent:7
+fi
 
 echo "Pulling image ${DOCKER_IMAGE}..."
 sudo docker pull "${DOCKER_IMAGE}"
@@ -60,7 +62,7 @@ sudo docker run --rm \
 
 echo "Starting container ${CONTAINER_NAME}..."
 
-sudo docker run --rm \
+sudo docker run \
   --env-file .env \
   -e GOOGLE_PROJECT_ID="${GOOGLE_PROJECT_ID}" \
   -p 3000:3000 \
