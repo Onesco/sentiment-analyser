@@ -1,3 +1,4 @@
+import '../../../libs/common/src/datadog/tracer';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';

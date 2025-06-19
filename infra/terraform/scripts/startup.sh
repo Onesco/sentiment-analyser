@@ -33,6 +33,18 @@ export $(cat $ENV_FILE | xargs)
 
 sudo gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
 
+echo "running datadog container"
+sudo docker run -d --name dd-agent \
+-e DD_API_KEY="${DD_API_KEY}"\
+-e DD_SITE="${DD_SITE}" \
+-e DD_DOGSTATSD_NON_LOCAL_TRAFFIC=true \
+-e DD_ENV="${DD_ENV_NAME}" \
+-v /var/run/docker.sock:/var/run/docker.sock:ro \
+-v /proc/:/host/proc/:ro \
+-v /sys/fs/cgroup/:/host/sys/fs/cgroup:ro \
+-v /var/lib/docker/containers:/var/lib/docker/containers:ro \
+gcr.io/datadoghq/agent:7
+
 echo "Pulling image ${DOCKER_IMAGE}..."
 sudo docker pull "${DOCKER_IMAGE}"
 
@@ -54,12 +66,6 @@ sudo docker run --rm \
   -p 3000:3000 \
   "${DOCKER_IMAGE}" \
   npm run start:prod
-
-echo "installing datadog agent"
-
-sudo DD_API_KEY=${DD_API_KEY} \
-DD_SITE=${DD_SITE} \
-bash -c "$(curl -L https://install.datadoghq.com/scripts/install_script_agent7.sh)"
 
 
 echo "Application deployed and running as container ${CONTAINER_NAME}."

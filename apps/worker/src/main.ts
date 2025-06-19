@@ -1,3 +1,4 @@
+import '../../../libs/common/src/datadog/tracer';
 import { NestFactory } from '@nestjs/core';
 import { WorkerModule } from './worker.module';
 import { WorkerService } from './worker.service';
